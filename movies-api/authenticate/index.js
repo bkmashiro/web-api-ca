@@ -25,4 +25,15 @@ const authenticate = async (request, response, next) => {
   }
 };
 
+export const withAuth = (handler) => {
+  return async (req, res, next) => {
+    try {
+      await authenticate(req, res, next);
+      await handler(req, res);
+    } catch (err) {
+      res.status(401).send({ error: err.message });
+    }
+  };
+}
+
 export default authenticate;
