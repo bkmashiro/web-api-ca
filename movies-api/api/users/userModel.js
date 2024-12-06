@@ -9,7 +9,9 @@ const UserSchema = new Schema({
     ref: 'User'
   },
   username: { type: String, unique: true, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  favouriteMovies: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 });
 
 const passwordValidator = (password) => {
