@@ -82,4 +82,85 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Delete a user
+router.delete('/:id', async (req, res) => {
+  const result = await User.deleteOne({ _id: req.params.id });
+  if (result.deletedCount) {
+    res.status(200).json({ code: 200, msg: 'User Deleted Sucessfully' });
+  } else {
+    res.status(404).json({ code: 404, msg: 'Unable to Delete User' });
+  }
+});
+
+// Favorite a movie
+router.post('/:username/favorites', async (req, res) => {
+  const user = await User.findByUserName(req.params.username);
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+  user.favorites.push(req.body);
+  await user.save();
+  res.status(201).json({ code: 201, msg: 'Movie added to favorites.' });
+});
+
+// Get all favorites
+router.get('/:username/favorites', async (req, res) => {
+  const user = await User.findByUserName(req.params.username);
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+  res.status(200).json(user.favorites);
+});
+
+// Delete a favorite
+router.delete('/:username/favorites/:id', async (req, res) => {
+  const user = await User.findByUserName(req.params.username);
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+  user.favorites.pull({ _id: req.params.id });
+  await user.save();
+  res.status(200).json({ code: 200, msg: 'Movie removed from favorites.' });
+});
+
+// Get all reviews
+router.get('/:username/reviews', async (req, res) => {
+  const user = await User.findByUserName(req.params.username);
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+  res.status(200).json(user.reviews);
+});
+
+// Delete a review
+router.delete('/:username/reviews/:id', async (req, res) => {
+  const user = await User.findByUserName(req.params.username);
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+  user.reviews.pull({ _id: req.params.id });
+  await user.save();
+  res.status(200).json({ code: 200, msg: 'Review removed.' });
+});
+
+// Add a review
+router.post('/:username/reviews', async (req, res) => {
+  const user = await User.findByUserName(req.params.username);
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+  user.reviews.push(req.body);
+  await user.save();
+  res.status(201).json({ code: 201, msg: 'Review added.' });
+});
+
+// Get a user by username
+router.get('/:username', async (req, res) => {
+  const user = await User.findByUserName(req.params.username);
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+  res.status(200).json(user);
+});
+
 export default router;
