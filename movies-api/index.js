@@ -6,6 +6,7 @@ import moviesRouter from './api/movies';
 import './db';
 import defaultErrHandler from './caller/errHandler'
 import authenticate from './authenticate';
+import tmdbProxy from './api/tmdb-proxy';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/users', usersRouter);
 app.use('/api/movies', authenticate, moviesRouter);
+app.use('/api/tmdb-proxy', authenticate, tmdbProxy);
 app.use(defaultErrHandler);
 
 app.listen(port, () => {
