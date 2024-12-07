@@ -27,6 +27,19 @@ async function authenticateUser(req, res) {
 const router = express.Router(); // eslint-disable-line
 
 // Get all users
+/**
+ * @openapi
+ * /api/users:
+ *  get:
+ *   tags:
+ *    - users
+ *  summary: Returns all users
+ * description: Retrieve a paginated list of all users.
+ * 
+ * responses:
+ *   200:
+ *    description: A list of users.
+ */
 router.get('/', async (req, res) => {
   const users = await User.find();
   res.status(200).json(users);

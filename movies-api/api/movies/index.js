@@ -7,6 +7,56 @@ import {
 
 const router = express.Router();
 
+/**
+ * @openapi
+ * /api/movies:
+ *   get:
+ *     tags:
+ *       - movies
+ *     summary: Returns all movies
+ *     description: Retrieve a paginated list of all movies.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: The page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: The number of items per page
+ *     responses:
+ *       200:
+ *         description: A JSON object containing a list of movies
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 total_pages:
+ *                   type: integer
+ *                   example: 10
+ *                 total_results:
+ *                   type: integer
+ *                   example: 100
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       title:
+ *                         type: string
+ *                         example: "Movie Title"
+ *                       year:
+ *                         type: integer
+ *                         example: 2024
+ */
 router.get('/', asyncHandler(async (req, res) => {
   let { page = 1, limit = 10 } = req.query; // destructure page and limit and set default values
   [page, limit] = [+page, +limit]; //trick to convert to numeric (req.query will contain string values)

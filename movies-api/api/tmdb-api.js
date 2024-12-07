@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 
+
 export const getUpcomingMovies = async () => {
   try {
     const response = await fetch(
