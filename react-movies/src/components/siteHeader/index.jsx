@@ -56,7 +56,7 @@ const SiteHeader = ({ history }) => {
             TMDB Client
           </Typography>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Logged in as: {currentUser ? currentUser.user.email : "Guest"}
+            Logged in as: {currentUser ? currentUser?.user?.email : "Guest"}
           </Typography>
           {isMobile ? (
             <>

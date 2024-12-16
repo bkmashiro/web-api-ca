@@ -1,10 +1,11 @@
 // src/pages/LoginPage.js
 import React, { useContext, useState } from "react";
-import { auth } from "../api/firebase";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+// import { auth } from "../api/firebase";
+// import {
+//   signInWithEmailAndPassword,
+//   createUserWithEmailAndPassword,
+// } from "firebase/auth";
+import { login, signup } from "../api/local-api";
 import { TextField, Button, Box, Typography } from "@mui/material";
 import { UserContext } from "../contexts/userContext";
 import { useNavigate } from "react-router-dom";
@@ -14,30 +15,46 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false); // Toggle between login and register
   const [error, setError] = useState("");
-  const { setCurrentUser } = useContext(UserContext);
+  const { authenticate } = useContext(UserContext);
 
   const navigate = useNavigate();
   const handleSubmit = async () => {
     setError("");
     try {
       if (isRegister) {
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("Account created successfully!");
+        // await createUserWithEmailAndPassword(auth, email, password);
+        const { code, message } = await signup(email, password);
+
+        if (code !== 201) {
+          setError(message);
+        } else {
+          navigate("/redirect", {
+            state: {
+              destination: "/login",
+              reason: "Redirecting to login page",
+            },
+          });
+        }
       } else {
-        const credential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        // const credential = await signInWithEmailAndPassword(
+        //   auth,
+        //   email,
+        //   password
+        // );
 
-        setCurrentUser(credential);
+        const credential = await authenticate(email, password);
 
-        alert("Logged in successfully!");
 
-        navigate("/");
+        navigate("/redirect", {
+          state: {
+            destination: "/",
+            reason: "Redirecting to home page",
+          },
+        });
       }
     } catch (err) {
-      setError((err as any).message);
+      console.error(err);
+      setError((err as any)?.response?.data?.msg || (err as any).message);
     }
   };
 
