@@ -65,3 +65,14 @@ export const signup = async (username, password) => {
     }
   );
 };
+
+export const getUser = async () => {
+  return await http.get<
+    {},
+    {
+      username: string;
+      password: string;
+      token: string;
+    }
+  >("/users/profile");
+};

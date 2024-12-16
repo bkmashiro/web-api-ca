@@ -1,11 +1,15 @@
-import { UserCredential } from "firebase/auth";
+// import { UserCredential } from "firebase/auth";
 import React, { useState } from "react";
-import { login, signup } from "../api/local-api";
+import { login, signup, getUser } from "../api/local-api";
 
 export const UserContext = React.createContext<any>(null);
 
 const UserContextProvider = (props) => {
-  const [currentUser, setCurrentUser] = useState<UserCredential | null>(null);
+  const [currentUser, setCurrentUser] = useState<{
+    token: string;
+    username: string;
+    password: string;
+  } | null>(null);
 
   const existingToken = localStorage.getItem("token");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,6 +26,8 @@ const UserContextProvider = (props) => {
     if (result.token) {
       setToken(result.token);
       setIsAuthenticated(true);
+      const user = await getUser()
+      setCurrentUser(user);
     }
   };
 

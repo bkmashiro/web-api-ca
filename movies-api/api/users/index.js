@@ -2,6 +2,7 @@ import express from 'express';
 import User from './userModel';
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
+import authenticate from '../../authenticate';
 
 async function registerUser(req, res) {
   // if exists, return 409 error
@@ -48,6 +49,20 @@ const router = express.Router(); // eslint-disable-line
 router.get('/', async (req, res) => {
   const users = await User.find();
   res.status(200).json(users);
+});
+
+router.get('/profile', authenticate, async (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false, msg: 'Unauthorized.' });
+  }
+
+  const user = await User.findByUserName(req.user.username);
+
+  if (!user) {
+    return res.status(404).json({ success: false, msg: 'User not found.' });
+  }
+
+  res.status(200).json(user);
 });
 
 // register(Create)/Authenticate User

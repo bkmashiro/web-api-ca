@@ -44,11 +44,10 @@ const ProfilePage: React.FC = () => {
   }
   console.log(currentUser);
   const {
-    email,
-    emailVerified,
-    metadata: { creationTime, lastSignInTime },
-    providerData,
-  } = currentUser.user;
+    username,
+    password,
+    token
+  } = currentUser;
 
   return (
     <Box sx={{ p: 3 }}>
@@ -60,43 +59,23 @@ const ProfilePage: React.FC = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h6" gutterBottom>
-                Email:
+                Username:
               </Typography>
-              <Typography>{email || "N/A"}</Typography>
+              <Typography>{username || "N/A"}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h6" gutterBottom>
-                Email Verified:
+                Password:
               </Typography>
-              <Typography>{emailVerified ? "Yes" : "No"}</Typography>
+              <Typography>{password}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h6" gutterBottom>
-                Created At:
+                Token:
               </Typography>
               <Typography>
-                {creationTime ? new Date(creationTime).toLocaleString() : "N/A"}
+                {token}
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Last Sign-In:
-              </Typography>
-              <Typography>
-                {lastSignInTime
-                  ? new Date(lastSignInTime).toLocaleString()
-                  : "N/A"}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Autherization Providers:
-              </Typography>
-              {providerData.map((provider, index) => (
-                <Typography key={index}>
-                  {provider.providerId} ({provider.email || "N/A"})
-                </Typography>
-              ))}
             </Grid>
           </Grid>
         </CardContent>
