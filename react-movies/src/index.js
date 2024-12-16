@@ -22,6 +22,7 @@ import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
 import UserContextProvider from "./contexts/userContext";
 import ProfilePage from "./pages/ProfilePage";
+import RedirectPage from "./pages/RedirectPage";
 import { history } from "./history";
 
 const queryClient = new QueryClient({
@@ -58,6 +59,7 @@ const App = () => {
                 <Route path="/person/:id" element={<PersonDetailPage />} />
                 <Route path="/" element={<HomePage />} />
                 {/* <Route path="*" element={<Navigate to="/" />} /> */}
+                <Route path="/redirect" element={<RedirectPage />} />
                 <Route path="/err" element={<Error400 />} />
                 <Route path="*" element={<Error404 />} />
               </Routes>

@@ -1,15 +1,36 @@
 import axios from "axios";
+import { history } from "../history";
 
 const http = axios.create({
-  baseURL: "https://api.themoviedb.org/3",
-  params: {
-    api_key: process.env.REACT_APP_TMDB_KEY,
-  },
+  baseURL: "http://localhost:8080/api/tmdb-proxy",
 });
 
-http.interceptors.response.use((response) => {
-  return response.data;
+http.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = token;
+  }
+  return config;
 });
+
+http.interceptors.response.use(
+  (response) => {
+    return response.data;
+  },
+  (error) => {
+    console.error("Error from TMDB API", error);
+    console.error("Error status", error.status);
+    if (error.status === 401 || error.status === 403) {
+      const urlSafeReason = encodeURIComponent(
+        "Your session has expired. Please log in again."
+      );
+      history.push(`/redirect?destination=/login&reason=${urlSafeReason}`);
+
+      // window.location.reload();
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const getMovies = (page = 1) => {
   return http.get(`/discover/movie`, {
