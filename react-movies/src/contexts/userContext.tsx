@@ -26,7 +26,7 @@ const UserContextProvider = (props) => {
     if (result.token) {
       setToken(result.token);
       setIsAuthenticated(true);
-      const user = await getUser()
+      const user = await getUser();
       setCurrentUser(user);
     }
   };
@@ -38,7 +38,11 @@ const UserContextProvider = (props) => {
   };
 
   const signout = () => {
-    setTimeout(() => setIsAuthenticated(false), 100);
+    setTimeout(() => {
+      setIsAuthenticated(false);
+      setAuthToken(null);
+      setCurrentUser(null);
+    }, 100);
   };
 
   return (

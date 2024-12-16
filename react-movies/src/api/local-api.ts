@@ -76,3 +76,9 @@ export const getUser = async () => {
     }
   >("/users/profile");
 };
+
+export const getFavorites = async (movieId) => {
+  return await http.post(`/favorites`, {
+    movieId,
+  });
+};

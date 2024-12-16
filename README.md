@@ -6,10 +6,11 @@ Name: Yuzhe Shi
 
 A bullet-point list of the ADDITIONAL features you have implemented in the API **THAT WERE NOT IN THE LABS** (or modifications to existing features)
  
- + Feature 1 
- + Feature 2 
- + Feature 3 
- + etc
++ Proxied all TMDb API endpoints to the local server. (So that little modification is needed in the React app)
++ Store user data (User info, liked movies, etc.) locally in the MongoDB database.
++ Swagger API documentation.
++ Cache the TMDb API response (for /movies endpoint) for 5 minutes.
++ Use TypeScript for better type checking and DX.
 
 ## Setup requirements.
 
@@ -44,6 +45,12 @@ If you have your API design on an online platform or graphic, please link to it 
 
 Give details of authentication/security implemented on the API (e.g. passport/sessions). Indicate which routes are protected.
 
++ use password and username to login, then get a JWT token to access other routes.
++ hash and salt the password before storing it in the database.
+
+Protected API:
++
+
 ## Integrating with React App
 
 Describe how you integrated your React app with the API. List the views that use your Web API instead of the TMDB API. Describe any other updates to the React app from Assignment One.
@@ -51,3 +58,11 @@ Describe how you integrated your React app with the API. List the views that use
 ## Independent learning (if relevant)
 
 Briefly explain any non-standard features developed for the app.   
+
++ Use proxy to delegate all requests originally to TMDB API to the local server.
++ Use Axios to send requests to the local server.
+
+
+## Future Work
+
++ Through not used here, but swagger OpenAPI can be exported and use Codegen to generate client code for front-end.

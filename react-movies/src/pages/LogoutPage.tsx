@@ -1,19 +1,19 @@
 // src/pages/LogoutPage.tsx
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../api/firebase";
+// import { auth } from "../api/firebase";
 import { signOut } from "firebase/auth";
 import { CircularProgress, Box, Typography } from "@mui/material";
 import { UserContext } from "../contexts/userContext";
 
 const LogoutPage: React.FC = () => {
   const navigate = useNavigate();
-  const { setCurrentUser } = useContext(UserContext);
+  const { signout } = useContext(UserContext);
   useEffect(() => {
     const logout = async () => {
       try {
-        await signOut(auth);
-        setCurrentUser(null); // Clear the current user
+        // await signOut(auth);
+        signout(); // Clear the current user
         navigate("/"); // Redirect to home page after logout
       } catch (error) {
         console.error("Error logging out:", error);

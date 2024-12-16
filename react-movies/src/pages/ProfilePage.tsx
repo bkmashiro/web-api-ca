@@ -20,7 +20,7 @@ const ProfilePage: React.FC = () => {
         navigate("/login");
       }, 3000);
 
-      return () => clearTimeout(timer); // 清理定时器，避免内存泄漏
+      return () => clearTimeout(timer);
     }
   }, [currentUser, navigate]);
 
@@ -43,11 +43,7 @@ const ProfilePage: React.FC = () => {
     );
   }
   console.log(currentUser);
-  const {
-    username,
-    password,
-    token
-  } = currentUser;
+  const { username, password, token } = currentUser;
 
   return (
     <Box sx={{ p: 3 }}>
@@ -73,9 +69,7 @@ const ProfilePage: React.FC = () => {
               <Typography variant="h6" gutterBottom>
                 Token:
               </Typography>
-              <Typography>
-                {token}
-              </Typography>
+              <Typography>{token}</Typography>
             </Grid>
           </Grid>
         </CardContent>

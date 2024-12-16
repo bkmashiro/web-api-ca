@@ -17,7 +17,7 @@ const authenticate = async (request, response, next) => {
     if (!token) throw new Error('Bearer token not found');
 
     const decoded = await jwt.verify(token, process.env.SECRET);
-    console.log(decoded);
+    // console.log(decoded);
 
     // Assuming decoded contains a username field
     const user = await User.findByUserName(decoded.username);
@@ -25,7 +25,7 @@ const authenticate = async (request, response, next) => {
       throw new Error('User not found');
     }
     // Optionally attach the user to the request for further use
-    console.log(user);
+    // console.log(user);
     request.user = user;
     next();
   } catch (err) {
