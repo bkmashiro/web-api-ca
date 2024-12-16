@@ -1,6 +1,13 @@
 import jwt from 'jsonwebtoken';
 import User from '../api/users/userModel';
 
+export class AuthError extends Error {
+  constructor(message, code) {
+    super(message);
+    this.code = code;
+  }
+}
+
 const authenticate = async (request, response, next) => {
   try {
     const authHeader = request.headers.authorization;
@@ -21,7 +28,9 @@ const authenticate = async (request, response, next) => {
     request.user = user;
     next();
   } catch (err) {
-    next(new Error(`Verification Failed: ${err.message}`));
+    next(
+      new AuthError('Authentication failed!', 401)
+    );
   }
 };
 

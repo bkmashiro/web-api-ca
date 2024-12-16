@@ -4,7 +4,14 @@ const defaultErrHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     return res.status(500).send(`Something went wrong!`);
   }
-  res.status(500).send(`Hey!! You caught the error 👍👍. Here's the details: ${err.stack} `);
+
+  const code = err.code || 500;
+
+  res.status(code).send({
+    message: err.message,
+    stack: err.stack,
+    code: err.code,
+  });
 };
 
 export default defaultErrHandler;
