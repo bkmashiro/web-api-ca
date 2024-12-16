@@ -104,11 +104,14 @@ class TMDbCache {
 
     console.log("[fallback] ", url);
     // fallback
-    return fetch(`https://api.themoviedb.org/3${url.replace("api/tmdb-proxy", "")}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.TMDB_KEY}`,
-      },
-    }).then((response) => response.json());
+    return fetch(
+      `https://api.themoviedb.org/3${url.replace("api/tmdb-proxy", "")}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TMDB_KEY}`,
+        },
+      }
+    ).then((response) => response.json());
   }
 }
 
@@ -122,6 +125,22 @@ router.get(
   asyncHandler(async (req, res) => {
     const data = await cache.get(req.url);
     res.json(data);
+  })
+);
+
+// not cached
+router.post(
+  "*",
+  asyncHandler(async (req, res) => {
+    const data = await fetch(`https://api.themoviedb.org/3${req.url}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_KEY}`,
+      },
+      body: req.body,
+    })
+
+    res.json(await data.json());
   })
 );
 

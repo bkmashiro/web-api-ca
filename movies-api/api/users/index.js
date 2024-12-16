@@ -84,26 +84,26 @@ router.post('/', asyncHandler(async (req, res) => {
 }));
 
 // register(Create)/Authenticate User
-router.post('/', async (req, res) => {
-  if (req.query.action === 'register') {  //if action is 'register' then save to DB
-    await User(req.body).save();
-    res.status(201).json({
-      code: 201,
-      msg: 'Successful created new user.',
-    });
-  }
-  else {  //Must be an authenticate then!!! Query the DB and check if there's a match
-    const user = await User.findOne(req.body);
-    if (!user) {
-      return res.status(401).json({ code: 401, msg: 'Authentication failed' });
-    } else {
-      return res.status(200).json({ code: 200, msg: "Authentication Successful", token: 'TEMPORARY_TOKEN' });
-    }
-  }
-});
+// router.post('/', async (req, res) => {
+//   if (req.query.action === 'register') {  //if action is 'register' then save to DB
+//     await User(req.body).save();
+//     res.status(201).json({
+//       code: 201,
+//       msg: 'Successful created new user.',
+//     });
+//   }
+//   else {  //Must be an authenticate then!!! Query the DB and check if there's a match
+//     const user = await User.findOne(req.body);
+//     if (!user) {
+//       return res.status(401).json({ code: 401, msg: 'Authentication failed' });
+//     } else {
+//       return res.status(200).json({ code: 200, msg: "Authentication Successful", token: 'TEMPORARY_TOKEN' });
+//     }
+//   }
+// });
 
 // Update a user
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   if (req.body._id) delete req.body._id;
   const result = await User.updateOne({
     _id: req.params.id,
@@ -116,7 +116,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   const result = await User.deleteOne({ _id: req.params.id });
   if (result.deletedCount) {
     res.status(200).json({ code: 200, msg: 'User Deleted Sucessfully' });

@@ -24,7 +24,7 @@ const authenticate = async (request, response, next) => {
     try {
       user = await User.findByUserName(decoded.username);
     } catch (error) {
-      console.error(` err `, error);
+      console.error(error);
     }
     if (!user) {
       throw new AuthError('User not exists', 401)
