@@ -1,5 +1,5 @@
 // import { UserCredential } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { login, signup, getUser } from "../api/local-api";
 
 export const UserContext = React.createContext<any>(null);
@@ -44,6 +44,23 @@ const UserContextProvider = (props) => {
       setCurrentUser(null);
     }, 100);
   };
+
+  // when loaded, try use the existing token to authenticate
+  useEffect(() => {
+    if (existingToken) {
+      // try to authenticate
+      try {
+        getUser().then((user) => {
+          if (user) {
+            setIsAuthenticated(true);
+            setCurrentUser(user);
+          }
+        });
+      } catch (error) {
+        console.error("Failed to authenticate with existing token:", error);
+      }
+    }
+  }, []);
 
   return (
     <UserContext.Provider

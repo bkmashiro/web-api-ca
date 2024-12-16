@@ -10,15 +10,15 @@ const UserSchema = new Schema({
   },
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  favouriteMovies: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
-  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
+  favouriteMovies: [{ type: Number, ref: 'Movie' }],
+  reviews: [{ type: String, ref: 'Review' }]
 });
 
-const passwordValidator = (password) => {
-  return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/g.test(password);
-}
+// const passwordValidator = (password) => {
+//   return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/g.test(password);
+// }
 
-UserSchema.path("password").validate(passwordValidator);
+// UserSchema.path("password").validate(passwordValidator);
 UserSchema.methods.comparePassword = async function (passw) {
   return await bcrypt.compare(passw, this.password);
 }

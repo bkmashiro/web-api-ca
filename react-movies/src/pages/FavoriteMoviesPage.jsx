@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { MoviesContext } from "../contexts/moviesContext";
 import { useQueries } from "react-query";
@@ -11,6 +11,8 @@ const FavoriteMoviesPage = () => {
   const { favorites: movieIds } = useContext(MoviesContext);
 
   // Create an array of queries and run in parallel.
+
+
   const favoriteMovieQueries = useQueries(
     movieIds.map((movieId) => {
       return {
@@ -31,7 +33,7 @@ const FavoriteMoviesPage = () => {
     return q.data;
   });
 
-  const toDo = () => true;
+  // const toDo = () => true;
 
   return (
     <PageTemplate

@@ -20,12 +20,18 @@ const authenticate = async (request, response, next) => {
     // console.log(decoded);
 
     // Assuming decoded contains a username field
-    const user = await User.findByUserName(decoded.username);
+    let user;
+    try {
+      user = await User.findByUserName(decoded.username);
+    } catch (error) {
+      console.error(` err `, error);
+    }
     if (!user) {
-      throw new Error('User not found');
+      throw new AuthError('User not exists', 401)
     }
     // Optionally attach the user to the request for further use
     // console.log(user);
+
     request.user = user;
     next();
   } catch (err) {

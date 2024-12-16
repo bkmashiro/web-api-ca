@@ -126,41 +126,41 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Favorite a movie
-router.post('/favorites', async (req, res) => {
+router.post('/favorites', authenticate, async (req, res) => {
   const user = req.user;
   if (!user) {
     return res.status(404).json({ code: 404, msg: 'User not found.' });
   }
-  user.favorites.push(req.body);
-  await user.save();
-  res.status(201).json({ code: 201, msg: 'Movie added to favorites.' });
+
+  if (!user.favouriteMovies) user.favouriteMovies = [];
+
+
+  if (req.body.action === 'delete') {
+    user.favouriteMovies = user.favouriteMovies.filter((movieId) => movieId !== req.body.movieId);
+    await user.save();
+    res.status(200).json({ code: 200, msg: 'Movie removed from favorites.' });
+  } else {
+    user.favouriteMovies.push(req.body.movieId);
+    await user.save();
+    res.status(201).json({ code: 201, msg: 'Movie added to favorites.' });
+  }
 });
 
 // Get all favorites
-router.get('/favorites', async (req, res) => {
+router.get('/favorites', authenticate, async (req, res) => {
   const user = req.user;
+  console.log(req.body.movieId)
 
   if (!user) {
     return res.status(404).json({ code: 404, msg: 'User not found.' });
   }
-
-  res.status(200).json(user.favorites);
+  console.log(`getting favorites: ${user.favouriteMovies}`);
+  res.status(200).json(user.favouriteMovies);
 });
 
-// Delete a favorite
-router.delete('/favorites/:id', async (req, res) => {
-  const user = req.user;
-
-  if (!user) {
-    return res.status(404).json({ code: 404, msg: 'User not found.' });
-  }
-  user.favorites.pull({ _id: req.params.id });
-  await user.save();
-  res.status(200).json({ code: 200, msg: 'Movie removed from favorites.' });
-});
 
 // Get all reviews
-router.get('/reviews', async (req, res) => {
+router.get('/reviews', authenticate, async (req, res) => {
   const user = req.user;
 
   if (!user) {
@@ -170,7 +170,7 @@ router.get('/reviews', async (req, res) => {
 });
 
 // Delete a review
-router.delete('/reviews/:id', async (req, res) => {
+router.delete('/reviews/:id', authenticate, async (req, res) => {
   const user = req.user;
 
   if (!user) {
@@ -182,7 +182,7 @@ router.delete('/reviews/:id', async (req, res) => {
 });
 
 // Add a review
-router.post('/reviews', async (req, res) => {
+router.post('/reviews', authenticate, async (req, res) => {
   const user = req.user;
 
   if (!user) {

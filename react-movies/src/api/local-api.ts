@@ -77,8 +77,17 @@ export const getUser = async () => {
   >("/users/profile");
 };
 
-export const getFavorites = async (movieId) => {
-  return await http.post(`/favorites`, {
+export const getFavorites = async () => {
+  return await http.get<{}, any>(`/users/favorites`);
+};
+
+export const setFavorites = async (movieId) => {
+  return await http.post<{}, any>(`/users/favorites`, { movieId });
+};
+
+export const deleteFavorites = async (movieId) => {
+  return await http.post<{}, any>(`/users/favorites`, {
     movieId,
+    action: "delete",
   });
 };

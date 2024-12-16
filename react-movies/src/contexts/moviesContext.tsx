@@ -1,39 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { getFavorites, setFavorites, deleteFavorites } from "../api/local-api";
 
 export const MoviesContext = React.createContext<any>(null);
-type Movie = any;
-const MoviesContextProvider = (props) => {
-  const [favorites, setFavorites] = useState<Movie>([]);
-  const [myReviews, setMyReviews] = useState({});
-  const [playList, setPlayList] = useState<Movie>([]);
 
-  const addToFavorites = (movie) => {
-    let newFavorites: Movie[] = [];
-    if (!favorites.includes(movie.id)) {
-      newFavorites = [...favorites, movie.id];
-    } else {
-      newFavorites = [...favorites];
-    }
-    setFavorites(newFavorites);
-  };
+type Movie = any;
+
+const MoviesContextProvider = (props) => {
+  const [favorites, setFavoritesState] = useState<Movie[]>([]);
+  const [myReviews, setMyReviews] = useState({});
+  const [playList, setPlayList] = useState<Movie[]>([]);
+
+  // 从后端加载初始状态
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const data = await getFavorites();
+        console.log("data", data);
+        setFavoritesState(data || []);
+      } catch (error) {
+        console.error("Failed to fetch favorites:", error);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  // 添加到收藏
+  const addToFavorites = useCallback(
+    async (movie) => {
+      if (!favorites.includes(movie.id)) {
+        const newFavorites = [...favorites, movie.id];
+        try {
+          await setFavorites(movie.id);
+          setFavoritesState(newFavorites);
+        } catch (error) {
+          console.error("Failed to add favorite:", error);
+        }
+      }
+    },
+    [favorites]
+  );
+
+  // 从收藏移除
+  const removeFromFavorites = useCallback(
+    async (movie) => {
+      const newFavorites = favorites.filter((mId) => mId !== movie.id);
+      try {
+        await deleteFavorites(movie.id);
+        setFavoritesState(newFavorites);
+      } catch (error) {
+        console.error("Failed to remove favorite:", error);
+      }
+    },
+    [favorites]
+  );
 
   const addReview = (movie, review) => {
     setMyReviews({ ...myReviews, [movie.id]: review });
   };
 
   const addMovieToPlayList = (movie) => {
-    let newPlayList: Movie[] = [];
     if (!playList.includes(movie.id)) {
-      newPlayList = [...playList, movie.id];
-    } else {
-      newPlayList = [...playList];
+      setPlayList((prevPlayList) => [...prevPlayList, movie.id]);
     }
-    setPlayList(newPlayList);
-  };
-
-  // We will use this function in the next step
-  const removeFromFavorites = (movie) => {
-    setFavorites(favorites.filter((mId) => mId !== movie.id));
   };
 
   return (
