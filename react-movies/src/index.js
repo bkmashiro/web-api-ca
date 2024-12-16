@@ -22,6 +22,7 @@ import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
 import UserContextProvider from "./contexts/userContext";
 import ProfilePage from "./pages/ProfilePage";
+import { history } from "./history";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,7 +42,7 @@ const App = () => {
           <SiteHeader />
           <PaginationContextProvider>
             <MoviesContextProvider>
-              <Routes>
+              <Routes history={history}>
                 <Route path="/profile" element={<ProfilePage />} />
 
                 <Route path="/login" element={<LoginPage />} />
