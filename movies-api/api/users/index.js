@@ -4,6 +4,11 @@ import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 
 async function registerUser(req, res) {
+  // if exists, return 409 error
+  if (await User.findByUserName(req.body.username)) {
+    return res.status(409).json({ success: false, msg: 'Username already exists.' });
+  }
+
   // Add input validation logic here
   await User.create(req.body);
   res.status(201).json({ success: true, msg: 'User successfully created.' });
