@@ -9,10 +9,12 @@ const router = express.Router();
  * */
 
 router.get('*', asyncHandler(async (req, res) => {
-  const url = `https://api.themoviedb.org/3/${req.url.replace('/api/tmdb-proxy/', '')}`;
+  const url = `https://api.themoviedb.org/3${req.url.replace('/api/tmdb-proxy/', '')}`;
+
+
   const response = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${process.env.TMDB_API_KEY}`
+      'Authorization': `Bearer ${process.env.TMDB_KEY}`
     }
   });
   const data = await response.json();
