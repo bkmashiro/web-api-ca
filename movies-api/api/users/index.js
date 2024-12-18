@@ -1,5 +1,6 @@
 import express from 'express';
 import User from './userModel';
+import Review from '../reviews/reviewModel';
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import authenticate from '../../authenticate';
@@ -176,7 +177,10 @@ router.delete('/reviews/:id', authenticate, async (req, res) => {
   if (!user) {
     return res.status(404).json({ code: 404, msg: 'User not found.' });
   }
-  user.reviews.pull({ _id: req.params.id });
+
+  user.reviews = user.reviews.filter((review) => review._id.toString() !== req.params.id);
+  await Review.deleteOne({ _id: req.params.id }).exec();
+
   await user.save();
   res.status(200).json({ code: 200, msg: 'Review removed.' });
 });
@@ -188,7 +192,18 @@ router.post('/reviews', authenticate, async (req, res) => {
   if (!user) {
     return res.status(404).json({ code: 404, msg: 'User not found.' });
   }
-  user.reviews.push(req.body);
+
+  const { movieId, review } = req.body;
+
+  if (!movieId || !review) {
+    return res.status(400).json({ code: 400, msg: 'Movie ID and review are required.' });
+  }
+
+  if (!user.reviews) user.reviews = [];
+
+  const newReview = await Review.create({ user: user._id, movieId, review, date: new Date() });
+  user.reviews.push(newReview._id);
+
   await user.save();
   res.status(201).json({ code: 201, msg: 'Review added.' });
 });

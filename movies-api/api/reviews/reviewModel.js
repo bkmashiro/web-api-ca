@@ -4,11 +4,9 @@ const Schema = mongoose.Schema;
 
 
 const ReviewSchema = new Schema({
-  id: { type: Number, required: true, unique: true },
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   movieId: { type: Number, required: true },
   review: { type: String, required: true },
-  username: { type: String, required: true },
   date: { type: Date, required: true }
 });
 
