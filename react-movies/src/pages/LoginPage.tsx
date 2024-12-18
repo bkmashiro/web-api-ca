@@ -1,10 +1,5 @@
 // src/pages/LoginPage.js
 import React, { useContext, useState } from "react";
-// import { auth } from "../api/firebase";
-// import {
-//   signInWithEmailAndPassword,
-//   createUserWithEmailAndPassword,
-// } from "firebase/auth";
 import { login, signup } from "../api/local-api";
 import { TextField, Button, Box, Typography } from "@mui/material";
 import { UserContext } from "../contexts/userContext";
@@ -18,11 +13,38 @@ const LoginPage = () => {
   const { authenticate } = useContext(UserContext);
 
   const navigate = useNavigate();
+
+  // Email validation using regex
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Password strength validation
+  const isValidPassword = (password) => {
+    // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number, and one special character
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const handleSubmit = async () => {
     setError("");
+
+    // Validate email and password before proceeding
+    if (!isValidEmail(email)) {
+      setError("Invalid email format.");
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      setError(
+        "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character."
+      );
+      return;
+    }
+
     try {
       if (isRegister) {
-        // await createUserWithEmailAndPassword(auth, email, password);
         const { code, message } = await signup(email, password);
 
         if (code !== 201) {
@@ -36,21 +58,12 @@ const LoginPage = () => {
           });
         }
       } else {
-        // const credential = await signInWithEmailAndPassword(
-        //   auth,
-        //   email,
-        //   password
-        // );
-
         const credential = await authenticate(email, password);
-
-
-        navigate("/redirect", {
-          state: {
-            destination: "/",
-            reason: "Redirecting to home page",
-          },
-        });
+        if (credential) {
+          navigate("/");
+        } else {
+          setError("Invalid credentials.");
+        }
       }
     } catch (err) {
       console.error(err);
