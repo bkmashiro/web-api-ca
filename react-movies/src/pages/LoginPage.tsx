@@ -60,6 +60,13 @@ const LoginPage = () => {
         }
       } else {
         await authenticate(email, password);
+
+        navigate("/redirect", {
+          state: {
+            destination: "/",
+            reason: "Redirecting to home page",
+          },
+        });
       }
     } catch (err) {
       console.error(err);
