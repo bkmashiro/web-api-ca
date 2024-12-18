@@ -12,6 +12,8 @@ A bullet-point list of the ADDITIONAL features you have implemented in the API *
 - Swagger API documentation.
 - Use TypeScript for better type checking and DX.
 - When accesses unauthorized routes, automatically redirect to the login page.
+- validation on register and login.
+- localized review storage.
 
 ## Setup requirements.
 
