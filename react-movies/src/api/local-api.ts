@@ -81,7 +81,7 @@ export const getFavorites = async () => {
   return await http.get<{}, any>(`/users/favorites`);
 };
 
-export const setFavorites = async (movieId) => {
+export const addFavorites = async (movieId) => {
   return await http.post<{}, any>(`/users/favorites`, { movieId });
 };
 
@@ -90,4 +90,16 @@ export const deleteFavorites = async (movieId) => {
     movieId,
     action: "delete",
   });
+};
+
+export const getReviews = async () => {
+  return await http.get<{}, any>(`/users/reviews`);
+};
+
+export const addReviews = async (movieId, review) => {
+  return await http.post<{}, any>(`/users/reviews`, { movieId, review });
+};
+
+export const deleteReviews = async (movieId) => {
+  return await http.delete<{}, any>(`/users/reviews/${movieId}`);
 };

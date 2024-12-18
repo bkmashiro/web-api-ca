@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getFavorites, setFavorites, deleteFavorites } from "../api/local-api";
+import {
+  getFavorites,
+  addFavorites,
+  deleteFavorites,
+  addReviews,
+  getReviews,
+  deleteReviews,
+} from "../api/local-api";
 
 export const MoviesContext = React.createContext<any>(null);
 
@@ -10,7 +17,6 @@ const MoviesContextProvider = (props) => {
   const [myReviews, setMyReviews] = useState({});
   const [playList, setPlayList] = useState<Movie[]>([]);
 
-  // 从后端加载初始状态
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -25,13 +31,12 @@ const MoviesContextProvider = (props) => {
     fetchFavorites();
   }, []);
 
-  // 添加到收藏
   const addToFavorites = useCallback(
     async (movie) => {
       if (!favorites.includes(movie.id)) {
         const newFavorites = [...favorites, movie.id];
         try {
-          await setFavorites(movie.id);
+          await addFavorites(movie.id);
           setFavoritesState(newFavorites);
         } catch (error) {
           console.error("Failed to add favorite:", error);
@@ -41,7 +46,6 @@ const MoviesContextProvider = (props) => {
     [favorites]
   );
 
-  // 从收藏移除
   const removeFromFavorites = useCallback(
     async (movie) => {
       const newFavorites = favorites.filter((mId) => mId !== movie.id);
@@ -56,7 +60,14 @@ const MoviesContextProvider = (props) => {
   );
 
   const addReview = (movie, review) => {
-    setMyReviews({ ...myReviews, [movie.id]: review });
+    addReviews(movie.id, review)
+      .then(() => {
+        console.log("review added");
+        setMyReviews({ ...myReviews, [movie.id]: review });
+      })
+      .catch((error) => {
+        console.error("Failed to add review:", error);
+      });
   };
 
   const addMovieToPlayList = (movie) => {
