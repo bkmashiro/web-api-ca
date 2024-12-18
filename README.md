@@ -51,6 +51,8 @@ Give an overview of your web API design, perhaps similar to the following:
 | `/favouites` | `GET` | get all fav movies of current user | require auth |
 | `/favouites/:id` | `DELETE` | delete a movie from current user fav list | require auth |
 | `/reviews` | `POST` | add review to a movie | require auth |
+| `/reviews` | `GET` | add review to a movie | require auth |
+| `/reviews/:id` | `DELETE` | delete a review with id | require auth |
 
 
 
