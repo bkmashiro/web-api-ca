@@ -23,7 +23,8 @@ const LoginPage = () => {
   // Password strength validation
   const isValidPassword = (password) => {
     // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number, and one special character
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     return passwordRegex.test(password);
   };
 
@@ -58,12 +59,7 @@ const LoginPage = () => {
           });
         }
       } else {
-        const credential = await authenticate(email, password);
-        if (credential) {
-          navigate("/");
-        } else {
-          setError("Invalid credentials.");
-        }
+        await authenticate(email, password);
       }
     } catch (err) {
       console.error(err);
