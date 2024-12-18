@@ -64,7 +64,7 @@ const LoginPage = () => {
         navigate("/redirect", {
           state: {
             destination: "/",
-            reason: "Redirecting to home page",
+            reason: "Login success! Redirecting to home page",
           },
         });
       }
