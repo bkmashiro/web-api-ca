@@ -96,6 +96,10 @@ export const getReviews = async () => {
   return await http.get<{}, any>(`/users/reviews`);
 };
 
+export const getReview = async (movieId) => {
+  return await http.get<{}, any>(`/users/reviews/${movieId}`);
+}
+
 export const addReviews = async (movieId, review) => {
   return await http.post<{}, any>(`/users/reviews`, { movieId, review });
 };

@@ -14,7 +14,7 @@ type Movie = any;
 
 const MoviesContextProvider = (props) => {
   const [favorites, setFavoritesState] = useState<Movie[]>([]);
-  const [myReviews, setMyReviews] = useState({});
+  const [myReviews, setMyReviews] = useState<any[]>([]);
   const [playList, setPlayList] = useState<Movie[]>([]);
 
   useEffect(() => {
@@ -28,7 +28,17 @@ const MoviesContextProvider = (props) => {
       }
     };
 
+    const fetchReviews = async () => {
+      try {
+        const data = await getReviews();
+        setMyReviews(data || []);
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error);
+      }
+    };
+
     fetchFavorites();
+    fetchReviews();
   }, []);
 
   const addToFavorites = useCallback(
@@ -63,10 +73,27 @@ const MoviesContextProvider = (props) => {
     addReviews(movie.id, review)
       .then(() => {
         console.log("review added");
-        setMyReviews({ ...myReviews, [movie.id]: review });
+        setMyReviews((prevReviews) => [
+          ...prevReviews,
+          { movieId: movie.id, review },
+        ]);
       })
       .catch((error) => {
         console.error("Failed to add review:", error);
+      });
+  };
+
+  const deleteReview = (reviewId) => {
+    deleteReviews(reviewId)
+      .then(() => {
+        // console.log("review deleted");
+        // console.log(myReviews);
+
+        const newReviews = myReviews.filter((review) => review.id !== reviewId);
+        setMyReviews(newReviews);
+      })
+      .catch((error) => {
+        console.error("Failed to delete review:", error);
       });
   };
 
@@ -83,6 +110,7 @@ const MoviesContextProvider = (props) => {
         addToFavorites,
         removeFromFavorites,
         addReview,
+        deleteReview,
         myReviews,
         addMovieToPlayList,
         playList,

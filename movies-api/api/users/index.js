@@ -170,6 +170,22 @@ router.get('/reviews', authenticate, async (req, res) => {
   res.status(200).json(user.reviews);
 });
 
+// Get one reviews by id
+router.get('/reviews/:id', authenticate, async (req, res) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.status(404).json({ code: 404, msg: 'User not found.' });
+  }
+
+  const review = await Review.findOne({ _id: req.params.id }).exec();
+  if (!review) {
+    return res.status(404).json({ code: 404, msg: 'Review not found.' });
+  }
+
+  res.status(200).json(review);
+});
+
 // Delete a review
 router.delete('/reviews/:id', authenticate, async (req, res) => {
   const user = req.user;
@@ -178,7 +194,7 @@ router.delete('/reviews/:id', authenticate, async (req, res) => {
     return res.status(404).json({ code: 404, msg: 'User not found.' });
   }
 
-  user.reviews = user.reviews.filter((review) => review._id.toString() !== req.params.id);
+  user.reviews = user.reviews.filter((review) => review !== req.params.id);
   await Review.deleteOne({ _id: req.params.id }).exec();
 
   await user.save();
@@ -193,15 +209,15 @@ router.post('/reviews', authenticate, async (req, res) => {
     return res.status(404).json({ code: 404, msg: 'User not found.' });
   }
 
-  const { movieId, review } = req.body;
+  const { movieId: mid, review: { review: content, movieId, author, rating } } = req.body;
 
-  if (!movieId || !review) {
+  if (!movieId || !content) {
     return res.status(400).json({ code: 400, msg: 'Movie ID and review are required.' });
   }
 
   if (!user.reviews) user.reviews = [];
 
-  const newReview = await Review.create({ user: user._id, movieId, review, date: new Date() });
+  const newReview = await Review.create({ user: user._id, author, movieId, content, rating: rating, date: new Date() });
   user.reviews.push(newReview._id);
 
   await user.save();

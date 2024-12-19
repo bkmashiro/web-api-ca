@@ -9,6 +9,7 @@ import {
   Grid,
   CircularProgress,
 } from "@mui/material";
+import { IDReview } from "../components/movieReview";
 
 const ProfilePage: React.FC = () => {
   const { currentUser } = useContext(UserContext);
@@ -70,6 +71,21 @@ const ProfilePage: React.FC = () => {
                 Token:
               </Typography>
               <Typography>{token}</Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant="h6" gutterBottom>
+                My Reviews:
+              </Typography>
+              <Typography>
+                {currentUser.reviews
+                  ? currentUser.reviews.map((reviewId: string) => (
+                      <Typography key={reviewId}>
+                        <IDReview reviewID={reviewId} />
+                      </Typography>
+                    ))
+                  : "N/A"}
+              </Typography>
             </Grid>
           </Grid>
         </CardContent>
