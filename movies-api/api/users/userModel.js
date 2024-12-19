@@ -26,8 +26,12 @@ UserSchema.statics.findByUserName = function (username) {
   return this.findOne({ username: username });
 };
 UserSchema.pre('save', async function (next) {
-  const saltRounds = 10; // You can adjust the number of salt rounds
+  const saltRounds = 15; // You can adjust the number of salt rounds
   //const user = this;
+  if (!/^[\w-.]+@[\w-]+\.[a-z]{2,10}$/i.test(this.username)) {
+    return next(new Error('Invalid email address'));
+  }
+
   if (this.isModified('password') || this.isNew) {
     try {
       const hash = await bcrypt.hash(this.password, saltRounds);
@@ -36,7 +40,6 @@ UserSchema.pre('save', async function (next) {
     } catch (error) {
       next(error);
     }
-
   } else {
     next();
   }
