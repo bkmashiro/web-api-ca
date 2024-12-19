@@ -14,6 +14,7 @@ A bullet-point list of the ADDITIONAL features you have implemented in the API *
 - When accesses unauthorized routes, automatically redirect to the login page.
 - validation on register and login.
 - localized review storage.
+- support add, see, and delete reviews.
 
 ## Setup requirements.
 
