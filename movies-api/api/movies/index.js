@@ -28,6 +28,8 @@ const router = express.Router();
  *         schema:
  *           type: integer
  *         description: The number of items per page
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A JSON object containing a list of movies
