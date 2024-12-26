@@ -78,7 +78,15 @@ router.get('/', asyncHandler(async (req, res) => {
   res.status(200).json(returnObject);
 }));
 
-// Get movie details
+/**
+ * @openapi
+ * /api/movies/{id}:
+ *  get:
+ *   tags:
+ *    - movies
+ *  summary: Get a movie by ID
+ * description: Retrieve a movie by ID.
+ * */
 router.get('/:id', asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
   const movie = await movieModel.findByMovieDBId(id);
@@ -89,12 +97,30 @@ router.get('/:id', asyncHandler(async (req, res) => {
   }
 }));
 
+
+/**
+ * @openapi
+ * /tmdb/upcoming:
+ *  get:
+ *   tags:
+ *    - movies
+ *  summary: Get upcoming movies
+ * description: Retrieve a list of upcoming movies.
+ * */
 router.get('/tmdb/upcoming', asyncHandler(async (req, res) => {
   const upcomingMovies = await getUpcomingMovies();
   res.status(200).json(upcomingMovies);
 }));
 
-// get genres
+/**
+ * @openapi
+ * /tmdb/genres:
+ *  get:
+ *   tags:
+ *    - movies
+ *  summary: Get genres
+ * description: Retrieve a list of genres.
+ * */
 router.get('/tmdb/genres', asyncHandler(async (req, res) => {
   const genres = await movieModel.distinct("genres", {});
   res.status(200).json(genres);

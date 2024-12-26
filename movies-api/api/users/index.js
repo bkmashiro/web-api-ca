@@ -42,16 +42,21 @@ const router = express.Router(); // eslint-disable-line
  *    - users
  *  summary: Returns all users
  * description: Retrieve a paginated list of all users.
- * 
- * responses:
- *   200:
- *    description: A list of users.
  */
 router.get('/', async (req, res) => {
   const users = await User.find();
   res.status(200).json(users);
 });
 
+/**
+ * @openapi
+ * /api/users/profile:
+ * get:
+ * tags:
+ * - users
+ * summary: Returns the user profile
+ * description: Retrieve the profile of the currently authenticated user.
+ */
 router.get('/profile', authenticate, async (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ success: false, msg: 'Unauthorized.' });
@@ -67,6 +72,15 @@ router.get('/profile', authenticate, async (req, res, next) => {
 });
 
 // register(Create)/Authenticate User
+/** 
+ * @openapi
+ * /api/users:
+ *  post:
+ *   tags:
+ *    - users
+ *   summary: Register or authenticate a user
+ *   description: Register a new user or authenticate an existing user.
+ */
 router.post('/', asyncHandler(async (req, res) => {
   try {
     if (!req.body.username || !req.body.password) {
@@ -104,6 +118,15 @@ router.post('/', asyncHandler(async (req, res) => {
 // });
 
 // Update a user
+/** 
+ * @openapi
+ * /api/users/{id}:
+ *  put:
+ *   tags:
+ *    - users
+ *   summary: Update a user
+ *   description: Update a user by ID.
+ */
 router.put('/:id', authenticate, async (req, res) => {
   if (req.body._id) delete req.body._id;
   const result = await User.updateOne({
@@ -148,6 +171,15 @@ router.post('/favorites', authenticate, async (req, res) => {
 });
 
 // Get all favorites
+/** 
+ * @openapi
+ * /api/users/favorites:
+ *  get:
+ *   tags:
+ *    - users
+ *   summary: Get all favorites
+ *   description: Retrieve a list of all favorite movies.
+ */
 router.get('/favorites', authenticate, async (req, res) => {
   const user = req.user;
   console.log(req.body.movieId)
@@ -161,6 +193,15 @@ router.get('/favorites', authenticate, async (req, res) => {
 
 
 // Get all reviews
+/** 
+ * @openapi
+ * /api/users/reviews:
+ *  get:
+ *   tags:
+ *    - users
+ *   summary: Get all reviews
+ *   description: Retrieve a list of all reviews.
+ */
 router.get('/reviews', authenticate, async (req, res) => {
   const user = req.user;
 
@@ -170,7 +211,15 @@ router.get('/reviews', authenticate, async (req, res) => {
   res.status(200).json(user.reviews);
 });
 
-// Get one reviews by id
+/** 
+ * @openapi
+ * /api/users/reviews/{id}:
+ *  get:
+ *   tags:
+ *    - users
+ *   summary: Get a review by ID
+ *   description: Retrieve a review by ID.
+ */
 router.get('/reviews/:id', authenticate, async (req, res) => {
   const user = req.user;
 

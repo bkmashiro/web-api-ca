@@ -2,7 +2,6 @@
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { auth } from "../api/firebase";
-import { signOut } from "firebase/auth";
 import { CircularProgress, Box, Typography } from "@mui/material";
 import { UserContext } from "../contexts/userContext";
 

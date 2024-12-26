@@ -120,6 +120,12 @@ class TMDbCache {
  * */
 const cache = new TMDbCache();
 
+/**
+ * @openapi
+ * /tmdb-proxy:
+ *  get:
+ *   description: Proxy request to TMDB API
+ * */
 router.get(
   "*",
   asyncHandler(async (req, res) => {
@@ -128,7 +134,12 @@ router.get(
   })
 );
 
-// not cached
+/**
+ * @openapi
+ * /tmdb-proxy:
+ *  post:
+ *   description: Proxy request to TMDB API
+ * */
 router.post(
   "*",
   asyncHandler(async (req, res) => {

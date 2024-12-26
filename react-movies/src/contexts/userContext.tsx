@@ -16,6 +16,13 @@ const UserContextProvider = (props) => {
   const [authToken, setAuthToken] = useState(existingToken);
 
   const setToken = (data) => {
+    if (!data) {
+      localStorage.removeItem("token");
+      console.log("removing token");
+      setAuthToken(null);
+      return;
+    }
+
     localStorage.setItem("token", data);
     setAuthToken(data);
   };
@@ -38,11 +45,10 @@ const UserContextProvider = (props) => {
   };
 
   const signout = () => {
-    setTimeout(() => {
-      setIsAuthenticated(false);
-      setAuthToken(null);
-      setCurrentUser(null);
-    }, 100);
+    console.log("signing out");
+    setToken(null);
+    setCurrentUser(null);
+    setIsAuthenticated(false);
   };
 
   // when loaded, try use the existing token to authenticate

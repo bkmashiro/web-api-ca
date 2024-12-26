@@ -26,7 +26,7 @@ http.interceptors.response.use(
       );
       history.push(`/redirect?destination=/login&reason=${urlSafeReason}`);
 
-      // window.location.reload();
+      window.location.reload();
     }
     return Promise.reject(error);
   }

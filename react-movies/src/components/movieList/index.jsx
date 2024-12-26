@@ -3,6 +3,12 @@ import Movie from "../movieCard/";
 import Grid from "@mui/material/Grid2";
 
 const MovieList = (props) => {
+
+  if (!props.movies || props.movies.length === 0) {
+    return <h2>No movies found</h2>;
+  }
+
+
   let movieCards = props.movies.map((m) => (
     <Grid
       key={m.id}

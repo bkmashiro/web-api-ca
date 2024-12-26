@@ -29,6 +29,9 @@ const FavoriteMoviesPage = () => {
   }
 
   const movies = favoriteMovieQueries.map((q) => {
+    if (!q.data) {
+      return [];
+    }
     q.data.genre_ids = q.data.genres.map((g) => g.id);
     return q.data;
   });
