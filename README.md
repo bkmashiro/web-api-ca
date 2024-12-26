@@ -1,6 +1,7 @@
 # Assignment 2 - Web API.
 
 Name: Yuzhe Shi
+Id: 20108862
 
 ## Features.
 
@@ -64,8 +65,8 @@ PORT=8080
 HOST=localhost
 
 MONGO_DB=MONGO_URL
-TMDB_KEY=TMDB_JWT_TOKEN(The_longer_one)
-SECRET=s
+TMDB_KEY=TMDB_JWT_TOKEN(The_longer_one, not the API key)
+SECRET=sec_ret
 ```
 
 ## API Design
@@ -88,7 +89,7 @@ SECRET=s
 | `/reviews` | `GET` | add review to a movie | require auth |
 | `/reviews/:id` | `DELETE` | delete a review with id | require auth |
 
-If you have your API design on an online platform or graphic, please link to it (e.g. [Swaggerhub](https://app.swaggerhub.com/)).
+Swagger API documentation: [http://localhost:8080/api-docs](http://localhost:8080/api-docs) (only available when backend is running)
 
 ## Security and Authentication
 
@@ -113,7 +114,7 @@ Protected API:
 
 ## Integrating with React App
 
-Describe how you integrated your React app with the API. List the views that use your Web API instead of the TMDB API. Describe any other updates to the React app from Assignment One.
+<!-- Describe how you integrated your React app with the API. List the views that use your Web API instead of the TMDB API. Describe any other updates to the React app from Assignment One. -->
 
 - All requests have been shifted to the Web API(movies API).
 - Some endpoints are specially cached (`/movies`), the API will cache the response for 5 minutes, instead of requesting the TMDB API every time. The other endpoints are proxied to the TMDB API. (all requests starts with `/tmdb-proxy/*`)
@@ -123,7 +124,7 @@ Describe how you integrated your React app with the API. List the views that use
 
 ## Independent learning (if relevant)
 
-Briefly explain any non-standard features developed for the app.
+<!-- Briefly explain any non-standard features developed for the app. -->
 
 - Use proxy to delegate all requests originally to TMDB API to the local server.
 - Use Axios to send requests to the local server.
